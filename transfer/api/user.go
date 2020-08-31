@@ -1,14 +1,11 @@
 package api
 
 import (
-	"strconv"
-
 	"github.com/labstack/echo/v4"
 	log "github.com/sirupsen/logrus"
 
 	cmn "github.com/yuleihua/trade/pkg/common"
 	"github.com/yuleihua/trade/pkg/server"
-	"github.com/yuleihua/trade/transfer/biz"
 	"github.com/yuleihua/trade/transfer/errcode"
 	"github.com/yuleihua/trade/transfer/service"
 	"github.com/yuleihua/trade/transfer/types"
@@ -39,26 +36,15 @@ func CustomerLoginHandler(c echo.Context) error {
 	}
 
 	if t, ok := transfer.(*service.Transfer); ok {
-		cid, err := t.Login(&req)
+		token, err := t.Login(&req)
 		if err != nil {
-			result := errcode.InvalidDatabaseError{Message: "no record by username"}
+			result := errcode.InvalidInternalError{Message: "internal error"}
 			c.JSON(200, map[string]interface{}{
 				"code": result.Code(),
 				"msg":  result.Error(),
 			})
 		}
 
-		uid := strconv.FormatInt(cid, 10)
-		token, err := biz.MakeJWTToken(uid, req.Name)
-		if err != nil {
-			log.Errorf("make token error, uid:%s, name:%s, %v", uid, req.Name, err)
-			result := errcode.InvalidTokenError{Message: "invalid token"}
-			c.JSON(200, map[string]interface{}{
-				"code": result.Code(),
-				"msg":  result.Error(),
-			})
-			return nil
-		}
 		c.JSON(200, map[string]interface{}{
 			"code": 0,
 			"data": token,

@@ -159,7 +159,8 @@ func HandleTransferFund(req *types.RequestTransfer, c *model.Customer) (*model.T
 
 	// step4: add balance
 	if !isRisk {
-		if err := model.UpdateFundTXUpBalance(tx, useFund.Id, req.MoneyAmt); err != nil {
+		upAmt := req.MoneyAmt - feeBalance
+		if err := model.UpdateFundTXUpBalance(tx, useFund.Id, upAmt); err != nil {
 			tx.Rollback()
 			log.Errorf("update fund error, fund: %s, %v", useFund, err)
 			return nil, err
@@ -294,7 +295,8 @@ func HandleConfirmFund(req *types.RequestReceipt, c *model.Customer) (*model.Tra
 	}
 
 	// step4: add balance
-	if err := model.UpdateFundTXUpBalance(tx, useFund.Id, req.MoneyAmt); err != nil {
+	upAmt := req.MoneyAmt - trade.Fee
+	if err := model.UpdateFundTXUpBalance(tx, useFund.Id, upAmt); err != nil {
 		tx.Rollback()
 		log.Errorf("update up-fund error, req: %v, %v", req, err)
 		return nil, err

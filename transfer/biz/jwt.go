@@ -3,6 +3,8 @@ package biz
 import (
 	"time"
 
+	"github.com/yuleihua/trade/transfer/types"
+
 	"github.com/dgrijalva/jwt-go"
 	"github.com/labstack/echo/v4"
 )
@@ -22,7 +24,7 @@ func MakeJWTToken(uid, name string) (t string, e error) {
 	claims := token.Claims.(jwt.MapClaims)
 	claims["uid"] = uid
 	claims["name"] = name
-	claims["exp"] = time.Now().Add(time.Hour * 12).Unix()
+	claims["exp"] = time.Now().Add(types.JWTTokenTTL).Unix()
 
 	t, e = token.SignedString([]byte("hello-88773dy2"))
 
