@@ -1,0 +1,43 @@
+common:
+  is_release: false
+  log_level: 5
+  cpus: 2
+  log_path: "./"
+  log_file: "trade.log"
+  app_file: "./"
+server:
+  AppName: "trade-server"
+  address: ":8080"
+  domain_api: "localhost:8080"
+  origins: ["*"]
+database:
+  is_debug: false
+  dsn: "root:dbadba@tcp(127.0.0.1:3306)/transfer?charset=utf8mb4&parseTime=true"
+  sql_log: "sql.log"
+  idle_conn: 16
+  max_conn: 32
+  lifeTime: 7200
+cache:
+  address: "192.168.208.130"
+  port: 6379
+  password: "foo"
+  dial_timeout: 15
+  read_timeout: 30
+  write_timeout: 30
+  pool_size: 16
+msg_queue:
+  address: "10.9.45.97:9092"
+  topic: "trade_event"
+  version: "2.1.1"
+  dial_timeout: 15
+  read_timeout: 30
+  write_timeout: 30
+tracing:
+  type: "elastic"
+  service_name: "trade"
+  address: ""
+  is_online: false
+metric:
+  is_online: false
+  freq_sec: 30
+  address: "127.0.0.1:2003"

@@ -1,0 +1,18 @@
+*.o
+*.a
+*.so
+
+*.exe
+*.test
+*.prof
+
+# Mac
+.DS_Store
+
+# IDEA
+.idea
+
+# Glide
+vendor
+
+trade
